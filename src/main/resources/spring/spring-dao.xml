@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<context:property-placeholder location="classpath:jdbc.properties" />
+
+	<!-- 数据源 -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		init-method="init" destroy-method="close">
+		<!-- 连接数据库的url，不同数据库不一样。例如： mysql : jdbc:mysql://10.20.153.104:3306/druid2 
+			oracle : jdbc:oracle:thin:@10.20.149.85:1521:ocnauto -->
+		<property name="url" value="${jdbc.url}" />
+		<!-- 连接数据库的用户名 -->
+		<property name="username" value="${jdbc.username}" />
+		<!-- 连接数据库的密码 -->
+		<property name="password" value="${jdbc.password}" />
+		<!-- 提示Druid数据源使用公钥对数据库密码进行解密 -->
+		<!-- <property name="connectionProperties" value="config.decrypt=true;config.decrypt.key=${publickey}" 
+			/> -->
+		<!-- 属性类型是字符串，通过别名的方式配置扩展插件，常用的插件有： 监控统计用的filter:stat 日志用的filter:log4j 
+			防御sql注入的filter:wall，如果支持密码加密必须设置为config -->
+		<property name="filters" value="config,stat,wall" />
+		<!-- 最大连接池数量 -->
+		<property name="maxActive" value="20" />
+		<!-- 初始化时建立物理连接的个数 -->
+		<property name="initialSize" value="1" />
+		<!-- 获取连接时最大等待时间，单位毫秒 -->
+		<property name="maxWait" value="60000" />
+		<!-- 最小连接池数量 -->
+		<property name="minIdle" value="1" />
+		<!-- 建议配置为true，不影响性能，并且保证安全性 -->
+		<property name="testWhileIdle" value="true" />
+		<!-- 申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能 -->
+		<property name="testOnBorrow" value="false" />
+		<!-- 归还连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能 -->
+		<property name="testOnReturn" value="false" />
+	</bean>
+
+	<!-- sqlSessionFactory工厂配置，用户连接Spring与Mybatis -->
+	<bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- 指定mybatis的confing文件位置,前面加上chasspath: -->
+		<property name="configLocation" value="classpath:mybatis-config.xml"></property>
+		<!-- 指定mapper存放的位置，前面加上chasspath: -->
+		<property name="mapperLocations" value="classpath:mapper/*.xml"></property>
+		<!-- 指定数据源 -->
+		<property name="dataSource" ref="dataSource"></property>
+		<!-- 映射实体路径,如果有多个路径，用, ; \n隔开 -->
+		<property name="typeAliasesPackage" value="com.lixiang.ssm.entity"></property>
+	</bean>
+
+	<!-- 映射扫描配置 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!-- 映射接口路径，如果有多个路径，用, ; \n隔开 -->
+		<property name="basePackage" value="com.lixiang.ssm.mapper"></property>
+		<!-- sqlSessionFactory工厂，注意，这里使用value不是ref，经常出错的地方 -->
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactoryBean"></property>
+	</bean>
+
+	<!-- 事务管理器 -->
+	<bean id="txManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- 启用事务 -->
+	<tx:annotation-driven transaction-manager="txManager" />
+
+</beans>

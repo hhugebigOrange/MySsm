@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/task
+	    http://www.springframework.org/schema/task/spring-task-4.3.xsd">
+
+	<!-- 需要扫描mvc的注解类 -->
+	<context:component-scan base-package="com.lixiang.ssm"></context:component-scan>
+	<!-- 开始定时任务 -->
+	<task:scheduler id="scheduler" pool-size="10" />
+	<task:annotation-driven executor="scheduler" proxy-target-class="true"/>
+	<!-- 启用mvc注解 -->
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+				<constructor-arg value="UTF-8" />
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+	
+	<!-- 允许访问静态资源，比如js、css、img -->
+	<mvc:default-servlet-handler />
+	<!-- 内容转发视图解析器 -->
+	<bean
+		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="viewResolvers">
+			<list>
+				<bean
+					class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+					<property name="prefix" value="/" />
+					<property name="suffix" value=".html" />
+					<property name="contentType" value="text/html;charset=UTF-8" />
+				</bean>
+				<!-- bean名字视图解析器 -->
+				<!-- <bean class="org.springframework.web.servlet.view.BeanNameViewResolver" 
+					/> -->
+				<!-- jsp视图解析器 -->
+				<!-- <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"> 
+					<property name="prefix" value="/WEB-INF/jsp/" /> <property name="suffix" 
+					value=".jsp" /> <property name="order" value="1" /> </bean> -->
+			</list>
+		</property>
+
+		<property name="defaultViews">
+			<list>
+				<bean
+					class="org.springframework.web.servlet.view.json.MappingJackson2JsonView" />
+				<!-- xml和json视图解析器 -->
+				<bean class="org.springframework.web.servlet.view.xml.MarshallingView">
+					<constructor-arg>
+						<bean class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+							<property name="packagesToScan">
+								<list>
+									<value>com.lixiang.ssm.entity</value>
+								</list>
+							</property>
+						</bean>
+					</constructor-arg>
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 文件表单解析器（多部件请求解析器），作用是将HttpServletRequest转为MultipartHttpServletRequest得到MulitpartFile对象 -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 最大允许上传文件大小 -->
+		<property name="maxUploadSize" value="1000000" />
+		<!-- 指定上传文件编码 -->
+		<property name="defaultEncoding" value="UTF-8"></property>
+	</bean>
+
+	<!-- <bean id="exption" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver"> 
+		<property name="exceptionMappings"> <props> <prop key="java.io.IOException">error/500</prop> 
+		<prop key="java.lang.ArithmeticException">error/500</prop> </props> </property> 
+		<property name="defaultErrorView" value="error/404"></property> </bean> -->
+
+	<!-- <bean id="shit" class="com.lixiang.springmvc.MyException"></bean> -->
+
+	<!-- 配置拦截器，可以多个一起写 -->
+	<!-- <mvc:interceptors> <mvc:interceptor> 配置拦截地址,**匹配多层路径 <mvc:mapping path="/user/**" 
+		/> 拦截到了，交给相应的bean类进行处理 <bean id="123" class="com.lx.springmvc.interceptor.LoginInterceptor"></bean> 
+		</mvc:interceptor> </mvc:interceptors> -->
+
+	<!-- 允许shiro注解，一定要写在最先加载的xml中，写在后面加载的xml中也不起作用 -->
+	<bean
+		class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+		depends-on="lifecycleBeanPostProcessor" />
+	<bean
+		class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+		<property name="securityManager" ref="securityManager" />
+	</bean>
+
+	<!-- 配置权限管理器 -->
+	<bean id="myShiro" class="com.lixiang.ssm.shiro.MyShiro"></bean>
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<!-- 我们自定义的realm -->
+		<property name="realm" ref="myShiro" />
+		<!-- 缓存管理器 -->
+		<property name="cacheManager" ref="cacheManager" />
+	</bean>
+
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<!-- 权限管理器 -->
+		<property name="securityManager" ref="securityManager" />
+		<!-- 登录地址 -->
+		<!-- <property name="loginUrl" value="/login.jsp"/> -->
+		<!-- 登录后跳转到业务页面 -->
+		<!-- <property name="successUrl" value="/main.jsp"/> -->
+		<!-- 错误页面 -->
+		<property name="unauthorizedUrl" value="/WEB-INF/jsp/error/no.jsp" />
+		<!-- 权限配置 -->
+		<property name="filterChainDefinitions">
+			<value>
+				<!-- anon无权限访问请求，此处是登录页面和登录请求 -->
+				/login = anon
+				/static/**=anon
+				<!-- 需要权限为add的用户才能访问此请求 -->
+				/user=perms[user:add]
+				<!-- 需要管理员角色才能访问此页面 -->
+				/user/add=roles[admin]
+				<!--拦截非静态资源的所有请求 -->
+				<!-- /** = authc -->
+			</value>
+		</property>
+	</bean>
+
+	<bean id="cacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager" />
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+
+	<!-- springmvc提供的简单异常处理器 -->
+	<bean
+		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<!-- 定义需要特殊处理的异常，这是重要点 -->
+		<property name="exceptionMappings">
+			<props>
+				<prop key="org.apache.shiro.authc.UnknownAccountException">html/accountErro</prop>
+			</props>
+			<!-- 还可以定义其他的自定义异常 -->
+		</property>
+	</bean>
+
+
+</beans>

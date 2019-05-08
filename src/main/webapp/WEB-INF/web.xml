@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+	id="WebApp_ID" version="3.1">
+
+	<display-name>Archetype Created Web Application</display-name>
+
+	<!-- 全局上下文参数 -->
+	<context-param>
+		<!-- 参数名固定不能改变 -->
+		<param-name>contextConfigLocation</param-name>
+		<!-- 上下配置文件路径 -->
+		<param-value>
+		classpath:spring/spring-context.xml,
+		classpath:spring/spring-dao.xml,
+		classpath:spring/springmvc-context.xml,
+		</param-value>
+	</context-param>
+
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.js</url-pattern>
+		<url-pattern>*.html</url-pattern>
+		<url-pattern>*.css</url-pattern>
+		<url-pattern>/assets/*"</url-pattern>
+		<url-pattern>/images/*</url-pattern>
+	</servlet-mapping>
+
+	<!-- 注册dispatcherServlet -->
+	<servlet>
+		<servlet-name>dispatcher</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:spring/springmvc-context.xml</param-value>
+		</init-param>
+		<!-- 容器初始化时启动并加载，常用来初始化配置文件 -->
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<!-- 映射dispatcherServlet -->
+	<servlet-mapping>
+		<servlet-name>dispatcher</servlet-name>
+		<!-- 不能有*号 ，映射所有的请求路径，/*指所有的文件和路径 -->
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+
+	<!-- 配置 Druid 监控信息显示页面 -->
+	<servlet>
+		<servlet-name>DruidStatView</servlet-name>
+		<servlet-class>com.alibaba.druid.support.http.StatViewServlet</servlet-class>
+		<init-param>
+			<!-- 允许清空统计数据 -->
+			<param-name>resetEnable</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<init-param>
+			<!-- 用户名 -->
+			<param-name>loginUsername</param-name>
+			<param-value>admin</param-value>
+		</init-param>
+		<init-param>
+			<!-- 密码 -->
+			<param-name>loginPassword</param-name>
+			<param-value>admin</param-value>
+		</init-param>
+	</servlet>
+
+	<!-- 映射Druid -->
+	<servlet-mapping>
+		<servlet-name>DruidStatView</servlet-name>
+		<url-pattern>/druid/*</url-pattern>
+	</servlet-mapping>
+
+
+	<!-- 上下文监听器，当容器启动时加载配置文件 -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+	<!-- 配置Shiro与Spring集合的过滤器 -->
+	<filter>
+		<filter-name>shiroFilter</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+		<init-param>
+			<param-name>targetFilterLifecycle</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>shiroFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!-- 配置字符过滤器，以免乱码 -->
+	<filter>
+		<filter-name>zhifu</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>utf-8</param-value>
+		</init-param>
+	</filter>
+
+	<!-- 映射字符过滤器 -->
+	<filter-mapping>
+		<filter-name>zhifu</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!-- 配置过滤器，根据表单的name="_method"的隐藏域的值将post请求转为put、delete请求 -->
+	<filter>
+		<filter-name>feiwu</filter-name>
+		<filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+	</filter>
+
+	<!-- 映射过滤器 -->
+	<filter-mapping>
+		<filter-name>feiwu</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!-- druid内置监控页面拦截 -->
+	<filter>
+		<filter-name>DruidWebStatFilter</filter-name>
+		<filter-class>com.alibaba.druid.support.http.WebStatFilter</filter-class>
+		<init-param>
+			<param-name>exclusions</param-name>
+			<param-value>*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>DruidWebStatFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!-- 配置错误页面500 -->
+	<error-page>
+		<error-code>500</error-code>
+		<location>/WEB-INF/jsp/error/500.jsp</location>
+	</error-page>
+
+	<!-- 配置错误页面404 -->
+	<!-- <error-page> <error-code>404</error-code> <location>/WEB-INF/jsp/error/404.jsp</location> 
+		</error-page> -->
+
+	<!-- 配置无权限异常 -->
+	<!-- <error-page> <exception-type>org.apache.shiro.authz.UnauthorizedException</exception-type> 
+		<location>/WEB-INF/jsp/error/no.jsp</location> </error-page> -->
+
+</web-app>

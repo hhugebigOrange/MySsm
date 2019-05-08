@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lixiang.ssm.mapper.ServiceMapper">
+	<resultMap id="BaseResultMap" type="com.lixiang.ssm.entity.Service">
+		<result column="WO_NUMBER" jdbcType="VARCHAR" property="woNumber" />
+		<result column="STAFF_ID" jdbcType="VARCHAR" property="staffId" />
+		<result column="ARRIVAL_TIME" jdbcType="INTEGER" property="arrivalTime" />
+		<result column="MAIN_RESULTS" jdbcType="VARCHAR" property="mainResults" />
+		<result column="SERVICE_MODE" jdbcType="VARCHAR" property="serviceMode" />
+		<result column="TEL_REPON" jdbcType="TIMESTAMP" property="telRepon" />
+		<result column="ARR_TIME" jdbcType="TIMESTAMP" property="arrTime" />
+		<result column="PROB_SOLVE" jdbcType="TIMESTAMP" property="probSolve" />
+		<result column="DOC_TYPE" jdbcType="VARCHAR" property="docType" />
+		<result column="CUST_SCORE" jdbcType="INTEGER" property="custScore" />
+		<result column="CUST_COMP" jdbcType="VARCHAR" property="custComp" />
+		<result column="CUST_PRAI" jdbcType="VARCHAR" property="custPrai" />
+		<result column="CUST_EVA" jdbcType="VARCHAR" property="custEva" />
+		<result column="CUST_SAT" jdbcType="VARCHAR" property="custSat" />
+		<result column="STATE" jdbcType="VARCHAR" property="state" />
+		<collection property="order" ofType="com.lixiang.ssm.entity.Order">
+			<id column="WO_NUMBER" jdbcType="VARCHAR" property="woNumber" />
+			<result column="PRIORITY" jdbcType="INTEGER" property="priority" />
+			<result column="FAULT_TYPE" jdbcType="VARCHAR" property="faultType" />
+			<result column="ES_NUMBER" jdbcType="VARCHAR" property="esNumber" />
+			<result column="CUST_NAME" jdbcType="VARCHAR" property="custName" />
+			<result column="CUST_ID" jdbcType="INTEGER" property="custId" />
+			<result column="DEV_NAME" jdbcType="VARCHAR" property="devName" />
+			<result column="MACH_CODE" jdbcType="VARCHAR" property="machCode" />
+			<result column="REPAIR_MAN" jdbcType="VARCHAR" property="repairMan" />
+			<result column="REPAIR_SERVICE" jdbcType="VARCHAR" property="repairService" />
+			<result column="CUST_ADDR" jdbcType="VARCHAR" property="custAddr" />
+			<result column="TREATMENT_STATE" jdbcType="VARCHAR" property="treatmentState" />
+			<result column="TREATMENT_MEASURE" jdbcType="VARCHAR"
+				property="treatmentMeasure" />
+			<result column="REPAIR_TIME" jdbcType="TIMESTAMP" property="repairTime" />
+			<result column="ACCEPT_TIME" jdbcType="TIMESTAMP" property="acceptTime" />
+			<result column="SEND_TIME" jdbcType="TIMESTAMP" property="sendTime" />
+			<result column="GETORDER_TIME" jdbcType="TIMESTAMP" property="getorderTime" />
+			<result column="COLSE_TIME" jdbcType="TIMESTAMP" property="colseTime" />
+			<result column="TURNORDER_TIME" jdbcType="TIMESTAMP" property="turnorderTime" />
+			<result column="TURNORDER_RESON" jdbcType="VARCHAR" property="turnorderReson" />
+			<result column="WO_STATUS" jdbcType="VARCHAR" property="woStatus" />
+			<result column="WO_PROGRESS" jdbcType="VARCHAR" property="woProgress" />
+			<result column="REMARK" jdbcType="VARCHAR" property="remark" />
+			<result column="REPAIR_TYPE" jdbcType="VARCHAR" property="repairType" />
+			<result column="ACCIDENT_TYPE" jdbcType="VARCHAR" property="accidentType" />
+			<result column="DISTRIBUTE_MAN" jdbcType="VARCHAR" property="distributeMan" />
+			<result column="SERVICE_TYPE" jdbcType="VARCHAR" property="serviceType" />
+			<result column="MACD_TYPE" jdbcType="VARCHAR" property="macdType" />
+			<result column="MAINTENANCE_FEEDBACK" jdbcType="VARCHAR"
+				property="maintenanceFeedback" />
+			<result column="FAULT_CLASS" jdbcType="VARCHAR" property="faultClass" />
+			<result column="FAULT_NO" jdbcType="VARCHAR" property="faultNo" />
+			<result column="PARTS_TYPE_NUMBER" jdbcType="VARCHAR"
+				property="partsTypeNumber" />
+			<result column="ORDER_ACCOUNT" jdbcType="VARCHAR" property="orderAccount" />
+		</collection>
+	</resultMap>
+	<insert id="insert" parameterType="com.lixiang.ssm.entity.Service">
+		insert into service_info
+		(WO_NUMBER, STAFF_ID, ARRIVAL_TIME,
+		MAIN_RESULTS, SERVICE_MODE,
+		TEL_REPON,
+		ARR_TIME, PROB_SOLVE, DOC_TYPE,
+		CUST_SCORE, CUST_COMP,
+		CUST_PRAI,
+		CUST_EVA, CUST_SAT, STATE
+		)
+		values
+		(#{woNumber,jdbcType=VARCHAR}, #{staffId,jdbcType=VARCHAR},
+		#{arrivalTime,jdbcType=INTEGER},
+		#{mainResults,jdbcType=VARCHAR},
+		#{serviceMode,jdbcType=VARCHAR}, #{telRepon,jdbcType=TIMESTAMP},
+		#{arrTime,jdbcType=TIMESTAMP}, #{probSolve,jdbcType=TIMESTAMP},
+		#{docType,jdbcType=VARCHAR},
+		#{custScore,jdbcType=INTEGER},
+		#{custComp,jdbcType=VARCHAR}, #{custPrai,jdbcType=VARCHAR},
+		#{custEva,jdbcType=VARCHAR}, #{custSat,jdbcType=VARCHAR},
+		#{state,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.lixiang.ssm.entity.Service">
+		insert into service_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="woNumber != null">
+				WO_NUMBER,
+			</if>
+			<if test="staffId != null">
+				STAFF_ID,
+			</if>
+			<if test="arrivalTime != null">
+				ARRIVAL_TIME,
+			</if>
+			<if test="mainResults != null">
+				MAIN_RESULTS,
+			</if>
+			<if test="serviceMode != null">
+				SERVICE_MODE,
+			</if>
+			<if test="telRepon != null">
+				TEL_REPON,
+			</if>
+			<if test="arrTime != null">
+				ARR_TIME,
+			</if>
+			<if test="probSolve != null">
+				PROB_SOLVE,
+			</if>
+			<if test="docType != null">
+				DOC_TYPE,
+			</if>
+			<if test="custScore != null">
+				CUST_SCORE,
+			</if>
+			<if test="custComp != null">
+				CUST_COMP,
+			</if>
+			<if test="custPrai != null">
+				CUST_PRAI,
+			</if>
+			<if test="custEva != null">
+				CUST_EVA,
+			</if>
+			<if test="custSat != null">
+				CUST_SAT,
+			</if>
+			<if test="state != null">
+				STATE,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="woNumber != null">
+				#{woNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="staffId != null">
+				#{staffId,jdbcType=VARCHAR},
+			</if>
+			<if test="arrivalTime != null">
+				#{arrivalTime,jdbcType=INTEGER},
+			</if>
+			<if test="mainResults != null">
+				#{mainResults,jdbcType=VARCHAR},
+			</if>
+			<if test="serviceMode != null">
+				#{serviceMode,jdbcType=VARCHAR},
+			</if>
+			<if test="telRepon != null">
+				#{telRepon,jdbcType=TIMESTAMP},
+			</if>
+			<if test="arrTime != null">
+				#{arrTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="probSolve != null">
+				#{probSolve,jdbcType=TIMESTAMP},
+			</if>
+			<if test="docType != null">
+				#{docType,jdbcType=VARCHAR},
+			</if>
+			<if test="custScore != null">
+				#{custScore,jdbcType=INTEGER},
+			</if>
+			<if test="custComp != null">
+				#{custComp,jdbcType=VARCHAR},
+			</if>
+			<if test="custPrai != null">
+				#{custPrai,jdbcType=VARCHAR},
+			</if>
+			<if test="custEva != null">
+				#{custEva,jdbcType=VARCHAR},
+			</if>
+			<if test="custSat != null">
+				#{custSat,jdbcType=VARCHAR},
+			</if>
+			<if test="state != null">
+				#{state,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+
+	<select id="selectByWoNumber" resultMap="BaseResultMap">
+		SELECT
+		o.*,s.*
+		FROM
+		service_info s
+		LEFT JOIN order_info o
+		ON
+		o.WO_NUMBER=s.WO_NUMBER
+		where s.WO_NUMBER=#{woNumber}
+	</select>
+
+</mapper>

@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lixiang.ssm.mapper.OrderMapper">
+  <resultMap id="BaseResultMap" type="com.lixiang.ssm.entity.Order">
+    <id column="WO_NUMBER" jdbcType="VARCHAR" property="woNumber" />
+    <result column="PRIORITY" jdbcType="INTEGER" property="priority" />
+    <result column="FAULT_TYPE" jdbcType="VARCHAR" property="faultType" />
+    <result column="ES_NUMBER" jdbcType="VARCHAR" property="esNumber" />
+    <result column="CUST_NAME" jdbcType="VARCHAR" property="custName" />
+    <result column="CUST_ID" jdbcType="INTEGER" property="custId" />
+    <result column="DEV_NAME" jdbcType="VARCHAR" property="devName" />
+    <result column="MACH_CODE" jdbcType="VARCHAR" property="machCode" />
+    <result column="REPAIR_MAN" jdbcType="VARCHAR" property="repairMan" />
+    <result column="REPAIR_SERVICE" jdbcType="VARCHAR" property="repairService" />
+    <result column="CUST_ADDR" jdbcType="VARCHAR" property="custAddr" />
+    <result column="TREATMENT_STATE" jdbcType="VARCHAR" property="treatmentState" />
+    <result column="TREATMENT_MEASURE" jdbcType="VARCHAR" property="treatmentMeasure" />
+    <result column="REPAIR_TIME" jdbcType="TIMESTAMP" property="repairTime" />
+    <result column="ACCEPT_TIME" jdbcType="TIMESTAMP" property="acceptTime" />
+    <result column="SEND_TIME" jdbcType="TIMESTAMP" property="sendTime" />
+    <result column="GETORDER_TIME" jdbcType="TIMESTAMP" property="getorderTime" />
+    <result column="COLSE_TIME" jdbcType="TIMESTAMP" property="colseTime" />
+    <result column="TURNORDER_TIME" jdbcType="TIMESTAMP" property="turnorderTime" />
+    <result column="TURNORDER_RESON" jdbcType="VARCHAR" property="turnorderReson" />
+    <result column="WO_STATUS" jdbcType="VARCHAR" property="woStatus" />
+    <result column="WO_PROGRESS" jdbcType="VARCHAR" property="woProgress" />
+    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+    <result column="REPAIR_TYPE" jdbcType="VARCHAR" property="repairType" />
+    <result column="ACCIDENT_TYPE" jdbcType="VARCHAR" property="accidentType" />
+    <result column="DISTRIBUTE_MAN" jdbcType="VARCHAR" property="distributeMan" />
+    <result column="SERVICE_TYPE" jdbcType="VARCHAR" property="serviceType" />
+    <result column="MACD_TYPE" jdbcType="VARCHAR" property="macdType" />
+    <result column="MAINTENANCE_FEEDBACK" jdbcType="VARCHAR" property="maintenanceFeedback" />
+    <result column="FAULT_CLASS" jdbcType="VARCHAR" property="faultClass" />
+    <result column="FAULT_NO" jdbcType="VARCHAR" property="faultNo" />
+    <result column="PARTS_TYPE_NUMBER" jdbcType="VARCHAR" property="partsTypeNumber" />
+    <result column="ORDER_ACCOUNT" jdbcType="VARCHAR" property="orderAccount" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    WO_NUMBER, PRIORITY, FAULT_TYPE, ES_NUMBER, CUST_NAME, CUST_ID, DEV_NAME, MACH_CODE, 
+    REPAIR_MAN, REPAIR_SERVICE, CUST_ADDR, TREATMENT_STATE, TREATMENT_MEASURE, REPAIR_TIME, 
+    ACCEPT_TIME, SEND_TIME, GETORDER_TIME, COLSE_TIME, TURNORDER_TIME, TURNORDER_RESON, 
+    WO_STATUS, WO_PROGRESS, REMARK, REPAIR_TYPE, ACCIDENT_TYPE, DISTRIBUTE_MAN, SERVICE_TYPE, 
+    MACD_TYPE, MAINTENANCE_FEEDBACK, FAULT_CLASS, FAULT_NO, PARTS_TYPE_NUMBER, ORDER_ACCOUNT
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from order_info
+    where WO_NUMBER = #{woNumber,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from order_info
+    where WO_NUMBER = #{woNumber,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.lixiang.ssm.entity.Order">
+    insert into order_info (WO_NUMBER, PRIORITY, FAULT_TYPE, 
+      ES_NUMBER, CUST_NAME, CUST_ID, 
+      DEV_NAME, MACH_CODE, REPAIR_MAN, 
+      REPAIR_SERVICE, CUST_ADDR, TREATMENT_STATE, 
+      TREATMENT_MEASURE, REPAIR_TIME, ACCEPT_TIME, 
+      SEND_TIME, GETORDER_TIME, COLSE_TIME, 
+      TURNORDER_TIME, TURNORDER_RESON, WO_STATUS, 
+      WO_PROGRESS, REMARK, REPAIR_TYPE, 
+      ACCIDENT_TYPE, DISTRIBUTE_MAN, SERVICE_TYPE, 
+      MACD_TYPE, MAINTENANCE_FEEDBACK, FAULT_CLASS, 
+      FAULT_NO, PARTS_TYPE_NUMBER, ORDER_ACCOUNT
+      )
+    values (#{woNumber,jdbcType=VARCHAR}, #{priority,jdbcType=INTEGER}, #{faultType,jdbcType=VARCHAR}, 
+      #{esNumber,jdbcType=VARCHAR}, #{custName,jdbcType=VARCHAR}, #{custId,jdbcType=INTEGER}, 
+      #{devName,jdbcType=VARCHAR}, #{machCode,jdbcType=VARCHAR}, #{repairMan,jdbcType=VARCHAR}, 
+      #{repairService,jdbcType=VARCHAR}, #{custAddr,jdbcType=VARCHAR}, #{treatmentState,jdbcType=VARCHAR}, 
+      #{treatmentMeasure,jdbcType=VARCHAR}, #{repairTime,jdbcType=TIMESTAMP}, #{acceptTime,jdbcType=TIMESTAMP}, 
+      #{sendTime,jdbcType=TIMESTAMP}, #{getorderTime,jdbcType=TIMESTAMP}, #{colseTime,jdbcType=TIMESTAMP}, 
+      #{turnorderTime,jdbcType=TIMESTAMP}, #{turnorderReson,jdbcType=VARCHAR}, #{woStatus,jdbcType=VARCHAR}, 
+      #{woProgress,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{repairType,jdbcType=VARCHAR}, 
+      #{accidentType,jdbcType=VARCHAR}, #{distributeMan,jdbcType=VARCHAR}, #{serviceType,jdbcType=VARCHAR}, 
+      #{macdType,jdbcType=VARCHAR}, #{maintenanceFeedback,jdbcType=VARCHAR}, #{faultClass,jdbcType=VARCHAR}, 
+      #{faultNo,jdbcType=VARCHAR}, #{partsTypeNumber,jdbcType=VARCHAR}, #{orderAccount,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lixiang.ssm.entity.Order">
+    insert into order_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="woNumber != null">
+        WO_NUMBER,
+      </if>
+      <if test="priority != null">
+        PRIORITY,
+      </if>
+      <if test="faultType != null">
+        FAULT_TYPE,
+      </if>
+      <if test="esNumber != null">
+        ES_NUMBER,
+      </if>
+      <if test="custName != null">
+        CUST_NAME,
+      </if>
+      <if test="custId != null">
+        CUST_ID,
+      </if>
+      <if test="devName != null">
+        DEV_NAME,
+      </if>
+      <if test="machCode != null">
+        MACH_CODE,
+      </if>
+      <if test="repairMan != null">
+        REPAIR_MAN,
+      </if>
+      <if test="repairService != null">
+        REPAIR_SERVICE,
+      </if>
+      <if test="custAddr != null">
+        CUST_ADDR,
+      </if>
+      <if test="treatmentState != null">
+        TREATMENT_STATE,
+      </if>
+      <if test="treatmentMeasure != null">
+        TREATMENT_MEASURE,
+      </if>
+      <if test="repairTime != null">
+        REPAIR_TIME,
+      </if>
+      <if test="acceptTime != null">
+        ACCEPT_TIME,
+      </if>
+      <if test="sendTime != null">
+        SEND_TIME,
+      </if>
+      <if test="getorderTime != null">
+        GETORDER_TIME,
+      </if>
+      <if test="colseTime != null">
+        COLSE_TIME,
+      </if>
+      <if test="turnorderTime != null">
+        TURNORDER_TIME,
+      </if>
+      <if test="turnorderReson != null">
+        TURNORDER_RESON,
+      </if>
+      <if test="woStatus != null">
+        WO_STATUS,
+      </if>
+      <if test="woProgress != null">
+        WO_PROGRESS,
+      </if>
+      <if test="remark != null">
+        REMARK,
+      </if>
+      <if test="repairType != null">
+        REPAIR_TYPE,
+      </if>
+      <if test="accidentType != null">
+        ACCIDENT_TYPE,
+      </if>
+      <if test="distributeMan != null">
+        DISTRIBUTE_MAN,
+      </if>
+      <if test="serviceType != null">
+        SERVICE_TYPE,
+      </if>
+      <if test="macdType != null">
+        MACD_TYPE,
+      </if>
+      <if test="maintenanceFeedback != null">
+        MAINTENANCE_FEEDBACK,
+      </if>
+      <if test="faultClass != null">
+        FAULT_CLASS,
+      </if>
+      <if test="faultNo != null">
+        FAULT_NO,
+      </if>
+      <if test="partsTypeNumber != null">
+        PARTS_TYPE_NUMBER,
+      </if>
+      <if test="orderAccount != null">
+        ORDER_ACCOUNT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="woNumber != null">
+        #{woNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="priority != null">
+        #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="faultType != null">
+        #{faultType,jdbcType=VARCHAR},
+      </if>
+      <if test="esNumber != null">
+        #{esNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="custName != null">
+        #{custName,jdbcType=VARCHAR},
+      </if>
+      <if test="custId != null">
+        #{custId,jdbcType=INTEGER},
+      </if>
+      <if test="devName != null">
+        #{devName,jdbcType=VARCHAR},
+      </if>
+      <if test="machCode != null">
+        #{machCode,jdbcType=VARCHAR},
+      </if>
+      <if test="repairMan != null">
+        #{repairMan,jdbcType=VARCHAR},
+      </if>
+      <if test="repairService != null">
+        #{repairService,jdbcType=VARCHAR},
+      </if>
+      <if test="custAddr != null">
+        #{custAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="treatmentState != null">
+        #{treatmentState,jdbcType=VARCHAR},
+      </if>
+      <if test="treatmentMeasure != null">
+        #{treatmentMeasure,jdbcType=VARCHAR},
+      </if>
+      <if test="repairTime != null">
+        #{repairTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="acceptTime != null">
+        #{acceptTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sendTime != null">
+        #{sendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="getorderTime != null">
+        #{getorderTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="colseTime != null">
+        #{colseTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="turnorderTime != null">
+        #{turnorderTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="turnorderReson != null">
+        #{turnorderReson,jdbcType=VARCHAR},
+      </if>
+      <if test="woStatus != null">
+        #{woStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="woProgress != null">
+        #{woProgress,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="repairType != null">
+        #{repairType,jdbcType=VARCHAR},
+      </if>
+      <if test="accidentType != null">
+        #{accidentType,jdbcType=VARCHAR},
+      </if>
+      <if test="distributeMan != null">
+        #{distributeMan,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceType != null">
+        #{serviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="macdType != null">
+        #{macdType,jdbcType=VARCHAR},
+      </if>
+      <if test="maintenanceFeedback != null">
+        #{maintenanceFeedback,jdbcType=VARCHAR},
+      </if>
+      <if test="faultClass != null">
+        #{faultClass,jdbcType=VARCHAR},
+      </if>
+      <if test="faultNo != null">
+        #{faultNo,jdbcType=VARCHAR},
+      </if>
+      <if test="partsTypeNumber != null">
+        #{partsTypeNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="orderAccount != null">
+        #{orderAccount,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lixiang.ssm.entity.Order">
+    update order_info
+    <set>
+      <if test="priority != null">
+        PRIORITY = #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="faultType != null">
+        FAULT_TYPE = #{faultType,jdbcType=VARCHAR},
+      </if>
+      <if test="esNumber != null">
+        ES_NUMBER = #{esNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="custName != null">
+        CUST_NAME = #{custName,jdbcType=VARCHAR},
+      </if>
+      <if test="custId != null">
+        CUST_ID = #{custId,jdbcType=INTEGER},
+      </if>
+      <if test="devName != null">
+        DEV_NAME = #{devName,jdbcType=VARCHAR},
+      </if>
+      <if test="machCode != null">
+        MACH_CODE = #{machCode,jdbcType=VARCHAR},
+      </if>
+      <if test="repairMan != null">
+        REPAIR_MAN = #{repairMan,jdbcType=VARCHAR},
+      </if>
+      <if test="repairService != null">
+        REPAIR_SERVICE = #{repairService,jdbcType=VARCHAR},
+      </if>
+      <if test="custAddr != null">
+        CUST_ADDR = #{custAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="treatmentState != null">
+        TREATMENT_STATE = #{treatmentState,jdbcType=VARCHAR},
+      </if>
+      <if test="treatmentMeasure != null">
+        TREATMENT_MEASURE = #{treatmentMeasure,jdbcType=VARCHAR},
+      </if>
+      <if test="repairTime != null">
+        REPAIR_TIME = #{repairTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="acceptTime != null">
+        ACCEPT_TIME = #{acceptTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sendTime != null">
+        SEND_TIME = #{sendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="getorderTime != null">
+        GETORDER_TIME = #{getorderTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="colseTime != null">
+        COLSE_TIME = #{colseTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="turnorderTime != null">
+        TURNORDER_TIME = #{turnorderTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="turnorderReson != null">
+        TURNORDER_RESON = #{turnorderReson,jdbcType=VARCHAR},
+      </if>
+      <if test="woStatus != null">
+        WO_STATUS = #{woStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="woProgress != null">
+        WO_PROGRESS = #{woProgress,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="repairType != null">
+        REPAIR_TYPE = #{repairType,jdbcType=VARCHAR},
+      </if>
+      <if test="accidentType != null">
+        ACCIDENT_TYPE = #{accidentType,jdbcType=VARCHAR},
+      </if>
+      <if test="distributeMan != null">
+        DISTRIBUTE_MAN = #{distributeMan,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceType != null">
+        SERVICE_TYPE = #{serviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="macdType != null">
+        MACD_TYPE = #{macdType,jdbcType=VARCHAR},
+      </if>
+      <if test="maintenanceFeedback != null">
+        MAINTENANCE_FEEDBACK = #{maintenanceFeedback,jdbcType=VARCHAR},
+      </if>
+      <if test="faultClass != null">
+        FAULT_CLASS = #{faultClass,jdbcType=VARCHAR},
+      </if>
+      <if test="faultNo != null">
+        FAULT_NO = #{faultNo,jdbcType=VARCHAR},
+      </if>
+      <if test="partsTypeNumber != null">
+        PARTS_TYPE_NUMBER = #{partsTypeNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="orderAccount != null">
+        ORDER_ACCOUNT = #{orderAccount,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where WO_NUMBER = #{woNumber,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lixiang.ssm.entity.Order">
+    update order_info
+    set PRIORITY = #{priority,jdbcType=INTEGER},
+      FAULT_TYPE = #{faultType,jdbcType=VARCHAR},
+      ES_NUMBER = #{esNumber,jdbcType=VARCHAR},
+      CUST_NAME = #{custName,jdbcType=VARCHAR},
+      CUST_ID = #{custId,jdbcType=INTEGER},
+      DEV_NAME = #{devName,jdbcType=VARCHAR},
+      MACH_CODE = #{machCode,jdbcType=VARCHAR},
+      REPAIR_MAN = #{repairMan,jdbcType=VARCHAR},
+      REPAIR_SERVICE = #{repairService,jdbcType=VARCHAR},
+      CUST_ADDR = #{custAddr,jdbcType=VARCHAR},
+      TREATMENT_STATE = #{treatmentState,jdbcType=VARCHAR},
+      TREATMENT_MEASURE = #{treatmentMeasure,jdbcType=VARCHAR},
+      REPAIR_TIME = #{repairTime,jdbcType=TIMESTAMP},
+      ACCEPT_TIME = #{acceptTime,jdbcType=TIMESTAMP},
+      SEND_TIME = #{sendTime,jdbcType=TIMESTAMP},
+      GETORDER_TIME = #{getorderTime,jdbcType=TIMESTAMP},
+      COLSE_TIME = #{colseTime,jdbcType=TIMESTAMP},
+      TURNORDER_TIME = #{turnorderTime,jdbcType=TIMESTAMP},
+      TURNORDER_RESON = #{turnorderReson,jdbcType=VARCHAR},
+      WO_STATUS = #{woStatus,jdbcType=VARCHAR},
+      WO_PROGRESS = #{woProgress,jdbcType=VARCHAR},
+      REMARK = #{remark,jdbcType=VARCHAR},
+      REPAIR_TYPE = #{repairType,jdbcType=VARCHAR},
+      ACCIDENT_TYPE = #{accidentType,jdbcType=VARCHAR},
+      DISTRIBUTE_MAN = #{distributeMan,jdbcType=VARCHAR},
+      SERVICE_TYPE = #{serviceType,jdbcType=VARCHAR},
+      MACD_TYPE = #{macdType,jdbcType=VARCHAR},
+      MAINTENANCE_FEEDBACK = #{maintenanceFeedback,jdbcType=VARCHAR},
+      FAULT_CLASS = #{faultClass,jdbcType=VARCHAR},
+      FAULT_NO = #{faultNo,jdbcType=VARCHAR},
+      PARTS_TYPE_NUMBER = #{partsTypeNumber,jdbcType=VARCHAR},
+      ORDER_ACCOUNT = #{orderAccount,jdbcType=VARCHAR}
+    where WO_NUMBER = #{woNumber,jdbcType=VARCHAR}
+  </update>
+</mapper>
