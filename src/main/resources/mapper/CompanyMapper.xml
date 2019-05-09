@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lixiang.ssm.mapper.CompanyMapper">
+	<resultMap id="BaseResultMap" type="com.lixiang.ssm.entity.Company">
+		<id column="company_id" jdbcType="VARCHAR" property="companyId" />
+		<result column="abbreviation" jdbcType="VARCHAR" property="abbreviation" />
+		<result column="company_name" jdbcType="VARCHAR" property="companyName" />
+		<result column="link_man" jdbcType="VARCHAR" property="linkMan" />
+		<result column="phone" jdbcType="VARCHAR" property="phone" />
+		<result column="telePhone" jdbcType="VARCHAR" property="telephone" />
+		<result column="e_mail" jdbcType="VARCHAR" property="eMail" />
+		<result column="address" jdbcType="VARCHAR" property="address" />
+		<collection property="employees" ofType="com.lixiang.ssm.entity.Employee">
+			<id column="employee_id" jdbcType="VARCHAR" property="employeeId" />
+			<result column="employee_code" jdbcType="VARCHAR" property="employeeCode" />
+			<result column="employee_name" jdbcType="VARCHAR" property="employeeName" />
+			<result column="employee_sex" jdbcType="CHAR" property="employeeSex" />
+			<result column="nationality" jdbcType="VARCHAR" property="nationality" />
+			<result column="birth_data" jdbcType="DATE" property="birthData" />
+			<result column="id_card" jdbcType="VARCHAR" property="idCard" />
+			<result column="employee_phone" jdbcType="VARCHAR" property="employeePhone" />
+			<result column="company_id" jdbcType="VARCHAR" property="companyId" />
+			<result column="department" jdbcType="VARCHAR" property="department" />
+			<result column="post" jdbcType="VARCHAR" property="post" />
+			<result column="entry_date" jdbcType="TIMESTAMP" property="entryDate" />
+			<result column="level_date" jdbcType="TIMESTAMP" property="levelDate" />
+			<result column="work_status" jdbcType="VARCHAR" property="workStatus" />
+			<result column="remark" jdbcType="VARCHAR" property="remark" />
+		</collection>
+	</resultMap>
+	<sql id="Base_Column_List">
+		company_id, abbreviation, company_name, link_man, phone,
+		telePhone, e_mail,
+		address
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		SELECT
+		c.*,e.*
+		FROM
+		company c
+		LEFT JOIN employee e
+		ON
+		c.company_id=e.company_id
+		WHERE c.company_id =
+		#{companyId,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from
+		company
+		where company_id = #{companyId,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.lixiang.ssm.entity.Company">
+		insert into company
+		(company_id, abbreviation, company_name,
+		link_man, phone, telePhone,
+		e_mail, address)
+		values (#{companyId,jdbcType=VARCHAR},
+		#{abbreviation,jdbcType=VARCHAR},
+		#{companyName,jdbcType=VARCHAR},
+		#{linkMan,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
+		#{telephone,jdbcType=VARCHAR},
+		#{eMail,jdbcType=VARCHAR},
+		#{address,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.lixiang.ssm.entity.Company">
+		insert into company
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="companyId != null">
+				company_id,
+			</if>
+			<if test="abbreviation != null">
+				abbreviation,
+			</if>
+			<if test="companyName != null">
+				company_name,
+			</if>
+			<if test="linkMan != null">
+				link_man,
+			</if>
+			<if test="phone != null">
+				phone,
+			</if>
+			<if test="telephone != null">
+				telePhone,
+			</if>
+			<if test="eMail != null">
+				e_mail,
+			</if>
+			<if test="address != null">
+				address,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="companyId != null">
+				#{companyId,jdbcType=VARCHAR},
+			</if>
+			<if test="abbreviation != null">
+				#{abbreviation,jdbcType=VARCHAR},
+			</if>
+			<if test="companyName != null">
+				#{companyName,jdbcType=VARCHAR},
+			</if>
+			<if test="linkMan != null">
+				#{linkMan,jdbcType=VARCHAR},
+			</if>
+			<if test="phone != null">
+				#{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="telephone != null">
+				#{telephone,jdbcType=VARCHAR},
+			</if>
+			<if test="eMail != null">
+				#{eMail,jdbcType=VARCHAR},
+			</if>
+			<if test="address != null">
+				#{address,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.lixiang.ssm.entity.Company">
+		update company
+		<set>
+			<if test="abbreviation != null">
+				abbreviation = #{abbreviation,jdbcType=VARCHAR},
+			</if>
+			<if test="companyName != null">
+				company_name = #{companyName,jdbcType=VARCHAR},
+			</if>
+			<if test="linkMan != null">
+				link_man = #{linkMan,jdbcType=VARCHAR},
+			</if>
+			<if test="phone != null">
+				phone = #{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="telephone != null">
+				telePhone = #{telephone,jdbcType=VARCHAR},
+			</if>
+			<if test="eMail != null">
+				e_mail = #{eMail,jdbcType=VARCHAR},
+			</if>
+			<if test="address != null">
+				address = #{address,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where company_id = #{companyId,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.lixiang.ssm.entity.Company">
+		update company
+		set
+		abbreviation = #{abbreviation,jdbcType=VARCHAR},
+		company_name =
+		#{companyName,jdbcType=VARCHAR},
+		link_man =
+		#{linkMan,jdbcType=VARCHAR},
+		phone = #{phone,jdbcType=VARCHAR},
+		telePhone = #{telephone,jdbcType=VARCHAR},
+		e_mail =
+		#{eMail,jdbcType=VARCHAR},
+		address = #{address,jdbcType=VARCHAR}
+		where
+		company_id = #{companyId,jdbcType=VARCHAR}
+	</update>
+</mapper>

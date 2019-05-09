@@ -35,7 +35,7 @@ PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
 		</javaModelGenerator>
 
 		<!--自动生成的*Mapper.xml文件存放路径 -->
-		<sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources/mapper">
+		<sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources">
 			<property name="enableSubPackages" value="true" />
 		</sqlMapGenerator>
 
@@ -47,7 +47,13 @@ PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
 		</javaClientGenerator>
 
 		<!-- 要对那些数据表进行生成操作，必须要有一个 -->
-		<table schema="mybatis" tableName="order_info" domainObjectName="Order"
+		<table schema="mybatis" tableName="company" domainObjectName="Company"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+		</table>
+		
+		<table schema="mybatis" tableName="employee" domainObjectName="Employee"
 			enableCountByExample="false" enableUpdateByExample="false"
 			enableDeleteByExample="false" enableSelectByExample="false"
 			selectByExampleQueryId="false">

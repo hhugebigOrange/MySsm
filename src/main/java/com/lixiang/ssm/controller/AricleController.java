@@ -8,22 +8,19 @@ package com.lixiang.ssm.controller;
 import java.util.HashMap;
 import java.util.Map;
 
-
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSONObject;
-import com.lixiang.ssm.entity.Device;
 import com.lixiang.ssm.entity.User;
+import com.lixiang.ssm.service.CompanyService;
 import com.lixiang.ssm.util.Util;
 
 import redis.clients.jedis.Jedis;
@@ -36,6 +33,9 @@ import redis.clients.jedis.Jedis;
  */
 @Controller
 public class AricleController {
+	
+	@Autowired
+	private CompanyService compamyService;
 
 	/**
 	 * 文章列表 TODO:登陆页面
@@ -47,7 +47,10 @@ public class AricleController {
 	 */
 	@RequestMapping(value = "/login")
 	@ResponseBody
-	public String login(@RequestParam("username") String username, @RequestParam("password") String password) {
+	public String login(String username,String password) {
+		if(username==null || password==null){
+			return "账号名或密码不能为空";
+		}
 		UsernamePasswordToken token = new UsernamePasswordToken(username, password);
 		Subject subject = SecurityUtils.getSubject();
 		try {
@@ -72,6 +75,26 @@ public class AricleController {
 		User user = (User) SecurityUtils.getSubject().getPrincipal();
 		return user.toString();
 	}
+	
+	/**
+	 * 根据公司ID，获取公司及名下员工信息
+	 * 
+	 * @version 2018年8月30日上午10:31:14
+	 * @author wutao
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/getCompany")
+	@ResponseBody
+	public Map<String,Object> getCompany(String companyId) {
+		Map<String,Object> json=new HashMap<>();
+		if(companyId==null || companyId.trim().equals("")){
+			json.put("data", "请输入要查询的公司Id");
+			return json;
+		}
+		json.put("data", compamyService.selectByPrimaryKey(companyId));
+		return json;
+	}
 
 	@RequiresPermissions("18011446524")
 	@RequestMapping(value = "/xixi")
@@ -80,13 +103,13 @@ public class AricleController {
 		return "臭傻逼";
 	}
 
-	@RequestMapping(value = "/getService")
+	/*@RequestMapping(value = "/getService")
 	public @ResponseBody Map<String, Object> getService(@RequestBody JSONObject obj) {
 		Map<String, Object> json = new HashMap<>();
     	Device device=JSONObject.toJavaObject(obj, Device.class);
     	json.put("data", device);
 		return json;
-	}
+	}*/
 
 	@Test
 	public void test() {

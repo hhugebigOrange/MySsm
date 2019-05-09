@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lixiang.ssm.mapper.EmployeeMapper">
+	<resultMap id="BaseResultMap" type="com.lixiang.ssm.entity.Employee">
+		<id column="employee_id" jdbcType="VARCHAR" property="employeeId" />
+		<result column="employee_code" jdbcType="VARCHAR" property="employeeCode" />
+		<result column="employee_name" jdbcType="VARCHAR" property="employeeName" />
+		<result column="employee_sex" jdbcType="CHAR" property="employeeSex" />
+		<result column="nationality" jdbcType="VARCHAR" property="nationality" />
+		<result column="birth_data" jdbcType="DATE" property="birthData" />
+		<result column="id_card" jdbcType="VARCHAR" property="idCard" />
+		<result column="employee_phone" jdbcType="VARCHAR" property="employeePhone" />
+		<result column="company_id" jdbcType="VARCHAR" property="companyId" />
+		<result column="department" jdbcType="VARCHAR" property="department" />
+		<result column="post" jdbcType="VARCHAR" property="post" />
+		<result column="entry_date" jdbcType="TIMESTAMP" property="entryDate" />
+		<result column="level_date" jdbcType="TIMESTAMP" property="levelDate" />
+		<result column="work_status" jdbcType="VARCHAR" property="workStatus" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<association property="company" javaType="com.lixiang.ssm.entity.Company">
+			<id column="company_id" jdbcType="VARCHAR" property="companyId" />
+			<result column="abbreviation" jdbcType="VARCHAR" property="abbreviation" />
+			<result column="company_name" jdbcType="VARCHAR" property="companyName" />
+			<result column="link_man" jdbcType="VARCHAR" property="linkMan" />
+			<result column="phone" jdbcType="VARCHAR" property="phone" />
+			<result column="telePhone" jdbcType="VARCHAR" property="telephone" />
+			<result column="e_mail" jdbcType="VARCHAR" property="eMail" />
+			<result column="address" jdbcType="VARCHAR" property="address" />
+		</association>
+	</resultMap>
+	<sql id="Base_Column_List">
+		employee_id, employee_code, employee_name, employee_sex, nationality, birth_data,
+		id_card, employee_phone, company_id, department, post, entry_date,
+		level_date, work_status,
+		remark
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from employee
+		where employee_id = #{employeeId,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from employee
+		where employee_id = #{employeeId,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.lixiang.ssm.entity.Employee">
+		insert into employee (employee_id, employee_code, employee_name,
+		employee_sex, nationality, birth_data,
+		id_card, employee_phone, company_id,
+		department, post, entry_date,
+		level_date, work_status, remark
+		)
+		values (#{employeeId,jdbcType=VARCHAR}, #{employeeCode,jdbcType=VARCHAR},
+		#{employeeName,jdbcType=VARCHAR},
+		#{employeeSex,jdbcType=CHAR}, #{nationality,jdbcType=VARCHAR}, #{birthData,jdbcType=DATE},
+		#{idCard,jdbcType=VARCHAR}, #{employeePhone,jdbcType=VARCHAR},
+		#{companyId,jdbcType=VARCHAR},
+		#{department,jdbcType=VARCHAR}, #{post,jdbcType=VARCHAR}, #{entryDate,jdbcType=TIMESTAMP},
+		#{levelDate,jdbcType=TIMESTAMP}, #{workStatus,jdbcType=VARCHAR},
+		#{remark,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.lixiang.ssm.entity.Employee">
+		insert into employee
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="employeeId != null">
+				employee_id,
+			</if>
+			<if test="employeeCode != null">
+				employee_code,
+			</if>
+			<if test="employeeName != null">
+				employee_name,
+			</if>
+			<if test="employeeSex != null">
+				employee_sex,
+			</if>
+			<if test="nationality != null">
+				nationality,
+			</if>
+			<if test="birthData != null">
+				birth_data,
+			</if>
+			<if test="idCard != null">
+				id_card,
+			</if>
+			<if test="employeePhone != null">
+				employee_phone,
+			</if>
+			<if test="companyId != null">
+				company_id,
+			</if>
+			<if test="department != null">
+				department,
+			</if>
+			<if test="post != null">
+				post,
+			</if>
+			<if test="entryDate != null">
+				entry_date,
+			</if>
+			<if test="levelDate != null">
+				level_date,
+			</if>
+			<if test="workStatus != null">
+				work_status,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="employeeId != null">
+				#{employeeId,jdbcType=VARCHAR},
+			</if>
+			<if test="employeeCode != null">
+				#{employeeCode,jdbcType=VARCHAR},
+			</if>
+			<if test="employeeName != null">
+				#{employeeName,jdbcType=VARCHAR},
+			</if>
+			<if test="employeeSex != null">
+				#{employeeSex,jdbcType=CHAR},
+			</if>
+			<if test="nationality != null">
+				#{nationality,jdbcType=VARCHAR},
+			</if>
+			<if test="birthData != null">
+				#{birthData,jdbcType=DATE},
+			</if>
+			<if test="idCard != null">
+				#{idCard,jdbcType=VARCHAR},
+			</if>
+			<if test="employeePhone != null">
+				#{employeePhone,jdbcType=VARCHAR},
+			</if>
+			<if test="companyId != null">
+				#{companyId,jdbcType=VARCHAR},
+			</if>
+			<if test="department != null">
+				#{department,jdbcType=VARCHAR},
+			</if>
+			<if test="post != null">
+				#{post,jdbcType=VARCHAR},
+			</if>
+			<if test="entryDate != null">
+				#{entryDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="levelDate != null">
+				#{levelDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="workStatus != null">
+				#{workStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.lixiang.ssm.entity.Employee">
+		update employee
+		<set>
+			<if test="employeeCode != null">
+				employee_code = #{employeeCode,jdbcType=VARCHAR},
+			</if>
+			<if test="employeeName != null">
+				employee_name = #{employeeName,jdbcType=VARCHAR},
+			</if>
+			<if test="employeeSex != null">
+				employee_sex = #{employeeSex,jdbcType=CHAR},
+			</if>
+			<if test="nationality != null">
+				nationality = #{nationality,jdbcType=VARCHAR},
+			</if>
+			<if test="birthData != null">
+				birth_data = #{birthData,jdbcType=DATE},
+			</if>
+			<if test="idCard != null">
+				id_card = #{idCard,jdbcType=VARCHAR},
+			</if>
+			<if test="employeePhone != null">
+				employee_phone = #{employeePhone,jdbcType=VARCHAR},
+			</if>
+			<if test="companyId != null">
+				company_id = #{companyId,jdbcType=VARCHAR},
+			</if>
+			<if test="department != null">
+				department = #{department,jdbcType=VARCHAR},
+			</if>
+			<if test="post != null">
+				post = #{post,jdbcType=VARCHAR},
+			</if>
+			<if test="entryDate != null">
+				entry_date = #{entryDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="levelDate != null">
+				level_date = #{levelDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="workStatus != null">
+				work_status = #{workStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where employee_id = #{employeeId,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.lixiang.ssm.entity.Employee">
+		update employee
+		set employee_code = #{employeeCode,jdbcType=VARCHAR},
+		employee_name = #{employeeName,jdbcType=VARCHAR},
+		employee_sex = #{employeeSex,jdbcType=CHAR},
+		nationality = #{nationality,jdbcType=VARCHAR},
+		birth_data = #{birthData,jdbcType=DATE},
+		id_card = #{idCard,jdbcType=VARCHAR},
+		employee_phone = #{employeePhone,jdbcType=VARCHAR},
+		company_id = #{companyId,jdbcType=VARCHAR},
+		department = #{department,jdbcType=VARCHAR},
+		post = #{post,jdbcType=VARCHAR},
+		entry_date = #{entryDate,jdbcType=TIMESTAMP},
+		level_date = #{levelDate,jdbcType=TIMESTAMP},
+		work_status = #{workStatus,jdbcType=VARCHAR},
+		remark = #{remark,jdbcType=VARCHAR}
+		where employee_id = #{employeeId,jdbcType=VARCHAR}
+	</update>
+</mapper>
