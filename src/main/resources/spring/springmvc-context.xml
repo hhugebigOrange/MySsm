@@ -20,7 +20,8 @@
 	<context:component-scan base-package="com.lixiang.ssm"></context:component-scan>
 	<!-- 开始定时任务 -->
 	<task:scheduler id="scheduler" pool-size="10" />
-	<task:annotation-driven executor="scheduler" proxy-target-class="true"/>
+	<task:annotation-driven executor="scheduler"
+		proxy-target-class="true" />
 	<!-- 启用mvc注解 -->
 	<mvc:annotation-driven>
 		<mvc:message-converters>
@@ -29,9 +30,10 @@
 			</bean>
 		</mvc:message-converters>
 	</mvc:annotation-driven>
-	
+
 	<!-- 允许访问静态资源，比如js、css、img -->
 	<mvc:default-servlet-handler />
+
 	<!-- 内容转发视图解析器 -->
 	<bean
 		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
@@ -90,9 +92,15 @@
 	<!-- <bean id="shit" class="com.lixiang.springmvc.MyException"></bean> -->
 
 	<!-- 配置拦截器，可以多个一起写 -->
-	<!-- <mvc:interceptors> <mvc:interceptor> 配置拦截地址,**匹配多层路径 <mvc:mapping path="/user/**" 
-		/> 拦截到了，交给相应的bean类进行处理 <bean id="123" class="com.lx.springmvc.interceptor.LoginInterceptor"></bean> 
-		</mvc:interceptor> </mvc:interceptors> -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<!-- 配置拦截地址,**匹配多层路径 -->
+			<mvc:mapping path="/**" />
+			<mvc:exclude-mapping path="/dologin"/>
+			<!-- 拦截到了，交给相应的bean类进行处理 -->
+			<bean id="123" class="com.lixiang.ssm.interceptor.LoginInterceptor"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
 
 	<!-- 允许shiro注解，一定要写在最先加载的xml中，写在后面加载的xml中也不起作用 -->
 	<bean
@@ -102,6 +110,17 @@
 		class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
 		<property name="securityManager" ref="securityManager" />
 	</bean>
+
+	<!--配置rememberMe cookie -->
+	<!-- <bean id="rememberMe" class="org.apache.shiro.web.servlet.SimpleCookie"> 
+		<constructor-arg value="rememberMe"></constructor-arg> <property name="httpOnly" 
+		value="true"></property> cookie 的最大失效时间 30天 <property name="maxAge" value="259200"></property> 
+		</bean> -->
+
+	<!--rememberMe 管理器 -->
+	<!-- <bean id="rememberMeManager" class="org.apache.shiro.web.mgt.CookieRememberMeManager"> 
+		<property name="cipherKey" value="#{T(org.apache.shiro.codec.Base64).decode('4AvVhmFLUs0KTA3Kprsdag==')}"></property> 
+		<property name="cookie" ref="rememberMe"></property> </bean> -->
 
 	<!-- 配置权限管理器 -->
 	<bean id="myShiro" class="com.lixiang.ssm.shiro.MyShiro"></bean>
@@ -116,19 +135,23 @@
 		<!-- 权限管理器 -->
 		<property name="securityManager" ref="securityManager" />
 		<!-- 登录地址 -->
-		<!-- <property name="loginUrl" value="/login.jsp"/> -->
+		<property name="loginUrl" value="/html/login.html" />
 		<!-- 登录后跳转到业务页面 -->
 		<!-- <property name="successUrl" value="/main.jsp"/> -->
 		<!-- 错误页面 -->
-		<property name="unauthorizedUrl" value="/WEB-INF/jsp/error/no.jsp" />
+		<property name="unauthorizedUrl" value="/noJurisdiction" />
+		<!-- 记住我管理器 -->
+		<!-- <property name="rememberMeManager" ref="rememberMeManager"/> -->
 		<!-- 权限配置 -->
 		<property name="filterChainDefinitions">
 			<value>
 				<!-- anon无权限访问请求，此处是登录页面和登录请求 -->
-				/login = anon
+				/login = anon 
+				/dologin = anon
 				/static/**=anon
 				<!-- 需要权限为add的用户才能访问此请求 -->
 				/user=perms[user:add]
+				<!-- /xixi=perms[18011446524] -->
 				<!-- 需要管理员角色才能访问此页面 -->
 				/user/add=roles[admin]
 				<!--拦截非静态资源的所有请求 -->
@@ -147,6 +170,7 @@
 		<property name="exceptionMappings">
 			<props>
 				<prop key="org.apache.shiro.authc.UnknownAccountException">html/accountErro</prop>
+				<prop key="org.apache.shiro.authz.AuthorizationException">html/noJurisdiction</prop>
 			</props>
 			<!-- 还可以定义其他的自定义异常 -->
 		</property>

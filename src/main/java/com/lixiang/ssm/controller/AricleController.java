@@ -8,6 +8,7 @@ package com.lixiang.ssm.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -32,13 +33,43 @@ import redis.clients.jedis.Jedis;
  * @author wutao
  */
 @Controller
-public class AricleController {
-	
+public class AricleController extends BaseController {
+
 	@Autowired
 	private CompanyService compamyService;
 
 	/**
-	 * 文章列表 TODO:登陆页面
+	 * 文章列表 TODO:登陆验证，成功写入Cookie到客户端
+	 * 
+	 * @version 2018年8月30日上午10:31:14
+	 * @author wutao
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/dologin")
+	@ResponseBody
+	public String dologin(String username, String password) {
+		//判断输入的用户名和密码是否为空
+		if (username == null || password == null) {
+			return "账号名或密码不能为空";
+		}
+		UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+		Subject subject = SecurityUtils.getSubject();
+		try {
+			//登陆验证
+			subject.login(token);
+			//写入Cookie，时长为2个小时
+			Cookie cookie = new Cookie("token", username + ":" + password);
+			cookie.setMaxAge(60*60*2);
+			response.addCookie(cookie);
+			return "登录成功";
+		} catch (IncorrectCredentialsException e) {
+			return "账号密码不正确";
+		}
+	}
+
+	/**
+	 * 文章列表 TODO:匹配登陆页面
 	 * 
 	 * @version 2018年8月30日上午10:31:14
 	 * @author wutao
@@ -46,19 +77,8 @@ public class AricleController {
 	 * @return
 	 */
 	@RequestMapping(value = "/login")
-	@ResponseBody
-	public String login(String username,String password) {
-		if(username==null || password==null){
-			return "账号名或密码不能为空";
-		}
-		UsernamePasswordToken token = new UsernamePasswordToken(username, password);
-		Subject subject = SecurityUtils.getSubject();
-		try {
-			subject.login(token);
-		} catch (IncorrectCredentialsException e) {
-			return "账号密码不正确";
-		}
-		return "登陆成功";
+	public String login() {
+		return "/html/login";
 	}
 
 	/**
@@ -75,7 +95,7 @@ public class AricleController {
 		User user = (User) SecurityUtils.getSubject().getPrincipal();
 		return user.toString();
 	}
-	
+
 	/**
 	 * 根据公司ID，获取公司及名下员工信息
 	 * 
@@ -86,9 +106,9 @@ public class AricleController {
 	 */
 	@RequestMapping(value = "/getCompany")
 	@ResponseBody
-	public Map<String,Object> getCompany(String companyId) {
-		Map<String,Object> json=new HashMap<>();
-		if(companyId==null || companyId.trim().equals("")){
+	public Map<String, Object> getCompany(String companyId) {
+		Map<String, Object> json = new HashMap<>();
+		if (companyId == null || companyId.trim().equals("")) {
 			json.put("data", "请输入要查询的公司Id");
 			return json;
 		}
@@ -103,19 +123,31 @@ public class AricleController {
 		return "臭傻逼";
 	}
 
-	/*@RequestMapping(value = "/getService")
-	public @ResponseBody Map<String, Object> getService(@RequestBody JSONObject obj) {
-		Map<String, Object> json = new HashMap<>();
-    	Device device=JSONObject.toJavaObject(obj, Device.class);
-    	json.put("data", device);
-		return json;
-	}*/
+	/*
+	 * @RequestMapping(value = "/getService") public @ResponseBody Map<String,
+	 * Object> getService(@RequestBody JSONObject obj) { Map<String, Object>
+	 * json = new HashMap<>(); Device device=JSONObject.toJavaObject(obj,
+	 * Device.class); json.put("data", device); return json; }
+	 */
 
 	@Test
 	public void test() {
-		Jedis jedis=Util.getJedis();
+		Jedis jedis = Util.getJedis();
 		jedis.set("nima", "chishi");
 		jedis.expire("nima", 60);
 		System.out.println(jedis.get("nima"));
+	}
+
+	/**
+	 * 无权限提示
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/noJurisdiction")
+	@ResponseBody
+	public Map<String, Object> noJurisdiction() {
+		Map<String, Object> json = new HashMap<>();
+		json.put("data", "对不起，您暂无权限访问");
+		return json;
 	}
 }
