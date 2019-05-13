@@ -39,7 +39,7 @@ public class AricleController extends BaseController {
 	private CompanyService compamyService;
 
 	/**
-	 * 文章列表 TODO:登陆验证，成功写入Cookie到客户端
+	 * 登陆验证，成功写入Cookie到客户端
 	 * 
 	 * @version 2018年8月30日上午10:31:14
 	 * @author wutao
@@ -69,7 +69,7 @@ public class AricleController extends BaseController {
 	}
 
 	/**
-	 * 文章列表 TODO:匹配登陆页面
+	 * 匹配登陆页面
 	 * 
 	 * @version 2018年8月30日上午10:31:14
 	 * @author wutao
@@ -82,7 +82,7 @@ public class AricleController extends BaseController {
 	}
 
 	/**
-	 * 获取当前用户信息 TODO:登陆页面
+	 * 获取当前用户信息 
 	 * 
 	 * @version 2018年8月30日上午10:31:14
 	 * @author wutao
@@ -91,9 +91,11 @@ public class AricleController extends BaseController {
 	 */
 	@RequestMapping(value = "/getUser")
 	@ResponseBody
-	public String getUser() {
+	public Map<String, Object> getUser() {
+		Map<String, Object> json = new HashMap<>();
 		User user = (User) SecurityUtils.getSubject().getPrincipal();
-		return user.toString();
+		json.put("data", user.toString());
+		return json;
 	}
 
 	/**
