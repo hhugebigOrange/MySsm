@@ -36,6 +36,8 @@ public class LoginInterceptor implements HandlerInterceptor {
 			throws Exception {
 		// 获取浏览器访问访问服务器时传递过来的cookie数组
 		Cookie[] cookies = request.getCookies();
+		String url = request.getRequestURI();
+		System.out.println(url);
 		// 如果cookies不为空，则说明用户之前1天内访问过本网站，可免登陆
 		if (cookies != null) {
 			System.out.println("进入cookies循环");
@@ -46,20 +48,21 @@ public class LoginInterceptor implements HandlerInterceptor {
 					UsernamePasswordToken token = new UsernamePasswordToken(a[0], a[1]);
 					Subject subject = SecurityUtils.getSubject();
 					subject.login(token);
-					cookie.setMaxAge(600);
+					//设置cookie时长为2个小时
+					cookie.setMaxAge(60*60*2);
 					response.addCookie(cookie);
 					return true;
 				}
 			}
 			System.out.println("没有Cookie");
 			//若没有相应Cookie，则跳转登陆页面
-			request.getRequestDispatcher("/html/login.html").forward(request,response);
+			response.sendRedirect(request.getContextPath() + "/html/login.html");
 			return false;
 		}
 		//如果没有Cookies，则说明用户未登陆，或登陆超时，需要重新登录
 		else{
 			System.out.println("没有Cookie");
-			request.getRequestDispatcher("/html/login.html").forward(request,response);
+			response.sendRedirect(request.getContextPath() + "/html/login.html");
 			return false;
 		}
 	}
@@ -79,7 +82,8 @@ public class LoginInterceptor implements HandlerInterceptor {
 	@Override
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
-		
+		String url = request.getRequestURI();
+		System.out.println("拦截后的URL"+url);
 	}
 
 }

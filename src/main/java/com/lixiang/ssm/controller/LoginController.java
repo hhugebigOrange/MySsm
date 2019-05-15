@@ -5,6 +5,7 @@
  */
 package com.lixiang.ssm.controller;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,7 +34,7 @@ import redis.clients.jedis.Jedis;
  * @author wutao
  */
 @Controller
-public class AricleController extends BaseController {
+public class LoginController extends BaseController {
 
 	@Autowired
 	private CompanyService compamyService;
@@ -49,19 +50,24 @@ public class AricleController extends BaseController {
 	@RequestMapping(value = "/dologin")
 	@ResponseBody
 	public String dologin(String username, String password) {
-		//判断输入的用户名和密码是否为空
+		// 判断输入的用户名和密码是否为空
 		if (username == null || password == null) {
 			return "账号名或密码不能为空";
 		}
-		UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+		UsernamePasswordToken token = new UsernamePasswordToken(username.trim(), password.trim());
 		Subject subject = SecurityUtils.getSubject();
 		try {
-			//登陆验证
+			// 登陆验证
 			subject.login(token);
-			//写入Cookie，时长为2个小时
+			// 写入Cookie，时长为2个小时
 			Cookie cookie = new Cookie("token", username + ":" + password);
-			cookie.setMaxAge(60*60*2);
+			cookie.setMaxAge(60 * 60 * 2);
 			response.addCookie(cookie);
+			try {
+				response.sendRedirect(request.getContextPath() + "/html/index.html");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			return "登录成功";
 		} catch (IncorrectCredentialsException e) {
 			return "账号密码不正确";
@@ -82,7 +88,7 @@ public class AricleController extends BaseController {
 	}
 
 	/**
-	 * 获取当前用户信息 
+	 * 获取当前用户信息
 	 * 
 	 * @version 2018年8月30日上午10:31:14
 	 * @author wutao
@@ -122,6 +128,11 @@ public class AricleController extends BaseController {
 	@RequestMapping(value = "/xixi")
 	@ResponseBody
 	public String xixi() {
+		try {
+			Thread.sleep(10000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+		}
 		return "臭傻逼";
 	}
 
@@ -135,9 +146,7 @@ public class AricleController extends BaseController {
 	@Test
 	public void test() {
 		Jedis jedis = Util.getJedis();
-		jedis.set("nima", "chishi");
-		jedis.expire("nima", 60);
-		System.out.println(jedis.get("nima"));
+		System.out.println(jedis.get("nima")==null?true:false);
 	}
 
 	/**

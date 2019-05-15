@@ -33,6 +33,8 @@
 
 	<!-- 允许访问静态资源，比如js、css、img -->
 	<mvc:default-servlet-handler />
+	
+	
 
 	<!-- 内容转发视图解析器 -->
 	<bean
@@ -97,8 +99,19 @@
 			<!-- 配置拦截地址,**匹配多层路径 -->
 			<mvc:mapping path="/**" />
 			<mvc:exclude-mapping path="/dologin"/>
+			<mvc:exclude-mapping path="/login"/>
+			<mvc:exclude-mapping path="/html/login.html"/>
 			<!-- 拦截到了，交给相应的bean类进行处理 -->
 			<bean id="123" class="com.lixiang.ssm.interceptor.LoginInterceptor"></bean>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<!-- 配置拦截地址,**匹配多层路径 -->
+			<mvc:mapping path="/**" />
+			<mvc:exclude-mapping path="/dologin"/>
+			<mvc:exclude-mapping path="/login"/>
+			<mvc:exclude-mapping path="/html/login.html"/>
+			<!-- 拦截到了，交给相应的bean类进行处理 -->
+			<bean id="234" class="com.lixiang.ssm.interceptor.CommitInterceptor"></bean>
 		</mvc:interceptor>
 	</mvc:interceptors>
 
