@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.context.ApplicationContext;
@@ -89,17 +90,33 @@ public class Util {
 	}
 
 	/**
-	 * 调用接口，返回json格式数据
-	 * 
-	 * @param url
+	 * 调用API接口，返回JSON格式数据
+	 * @param 请求url
+	 * @param 请求参数，放在MAP里面
 	 * @return
 	 */
-	public static JSONObject readJsonFromUrl(String url) {
+	public static JSONObject readJsonFromUrl(String url,Map<String,Object> args) {
 		StringBuilder json = new StringBuilder();
+		StringBuilder httpUrl=new StringBuilder(url);
+		URL oracle=null;
 		try {
-			URL oracle = new URL(url);
+			if(args==null){
+				oracle= new URL(url);
+			}else{
+				int i=0;
+				for (Map.Entry<String, Object> entry : args.entrySet()) {
+					   if(i==0){
+						   httpUrl.append("?"+entry.getKey()+"="+entry.getValue().toString());
+						   i=1;
+					   }else{
+						   httpUrl.append("&"+entry.getKey()+"="+entry.getValue().toString());
+					   }
+				   }
+				oracle= new URL(httpUrl.toString());
+			}
+			System.out.println(oracle.toString());
 			URLConnection yc = oracle.openConnection();
-			BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream(), "utf-8"));// 防止乱码
+			BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream(),"utf-8"));// 防止乱码
 			String inputLine = null;
 			while ((inputLine = in.readLine()) != null) {
 				json.append(inputLine);

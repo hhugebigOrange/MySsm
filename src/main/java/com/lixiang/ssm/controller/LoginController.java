@@ -1,8 +1,3 @@
-/*
- * Copyright (C) 2017 ShenZhen LiXiang Software Co.,Ltd All Rights Reserved.
- * 未经本公司正式书面同意，其他任何个人、团体不得使用、复制、修改或发布本软件.
- * 版权所有深圳市理想软件有限公司
- */
 package com.lixiang.ssm.controller;
 
 import java.io.IOException;
@@ -21,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.lixiang.ssm.entity.User;
 import com.lixiang.ssm.service.CompanyService;
@@ -127,14 +123,21 @@ public class LoginController extends BaseController {
 	@RequestMapping(value = "/xixi")
 	@ResponseBody
 	public JSONObject xixi() {
-		JSONObject json=Util.readJsonFromUrl("http://47.106.110.201/som/contractManage?page=1&limit=20&username=13711300835&serviceArea=&custName=&contractNature=&woStatus=");
+		Map<String, Object> args=new HashMap<>();
+		args.put("key", "9741bc57d42ff1f4e4675ed8d4a833f9");
+		args.put("type", 2);
+		args.put("fgcolor", "00b7ee");
+		args.put("w", "90");
+		args.put("m", "5");
+		args.put("text", "hello");
+		JSONObject json=JSONObject.parseObject(JSON.toJSONString(args));
 		return json;
 	}
 
 	@Test
 	public void test() {
-		JSONObject json=Util.readJsonFromUrl("http://47.106.110.201/som/contractManage?page=1&limit=20&username=13711300835&serviceArea=&custName=&contractNature=&woStatus=");
-		System.out.println(json.get("data"));
+		JSONObject json=Util.readJsonFromUrl("http://v.juhe.cn/toutiao/index?type=top&key=b481020293161d45db010d6919befa25",null);
+		System.out.println(json);
 	}
 
 	/**

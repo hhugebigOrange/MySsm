@@ -11,10 +11,10 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
- * 自定义登陆拦截器
  * 
- * @version 2018年8月22日下午5:57:17
- * @author zhuwenbin
+ * 类功能介绍: 登陆拦截，若用户未登录或登录超时，则跳转登录页面
+ * @author 伍涛
+ * @date 2019年5月20日
  */
 public class LoginInterceptor implements HandlerInterceptor {
 

@@ -15,10 +15,10 @@ import com.lixiang.ssm.util.Util;
 import redis.clients.jedis.Jedis;
 
 /**
- * 防止重复提交拦截器
  * 
- * @version 2018年8月22日下午5:57:17
- * @author zhuwenbin
+ * 类功能介绍: 拦截请求，防止重复提交
+ * @author 伍涛
+ * @date 2019年5月20日
  */
 public class CommitInterceptor implements HandlerInterceptor {
 
