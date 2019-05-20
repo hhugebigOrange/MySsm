@@ -21,11 +21,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSONObject;
 import com.lixiang.ssm.entity.User;
 import com.lixiang.ssm.service.CompanyService;
 import com.lixiang.ssm.util.Util;
-
-import redis.clients.jedis.Jedis;
 
 /**
  * TODO:类功能介绍
@@ -127,26 +126,15 @@ public class LoginController extends BaseController {
 	@RequiresPermissions("18011446524")
 	@RequestMapping(value = "/xixi")
 	@ResponseBody
-	public String xixi() {
-		try {
-			Thread.sleep(10000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-		}
-		return "臭傻逼";
+	public JSONObject xixi() {
+		JSONObject json=Util.readJsonFromUrl("http://47.106.110.201/som/contractManage?page=1&limit=20&username=13711300835&serviceArea=&custName=&contractNature=&woStatus=");
+		return json;
 	}
-
-	/*
-	 * @RequestMapping(value = "/getService") public @ResponseBody Map<String,
-	 * Object> getService(@RequestBody JSONObject obj) { Map<String, Object>
-	 * json = new HashMap<>(); Device device=JSONObject.toJavaObject(obj,
-	 * Device.class); json.put("data", device); return json; }
-	 */
 
 	@Test
 	public void test() {
-		Jedis jedis = Util.getJedis();
-		System.out.println(jedis.get("nima")==null?true:false);
+		JSONObject json=Util.readJsonFromUrl("http://47.106.110.201/som/contractManage?page=1&limit=20&username=13711300835&serviceArea=&custName=&contractNature=&woStatus=");
+		System.out.println(json.get("data"));
 	}
 
 	/**
